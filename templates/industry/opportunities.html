@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}Industry opportunities | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Industry Sidebar -->
+    <aside class="side-nav industry-side">
+        <p class="side-label">Industry workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Industry navigation">
+            <a href="{{ url_for('industry_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('industry_opportunities') }}">Opportunities</a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Open collaboration board</p>
+                <h1>Where can you help?</h1>
+                <p>Support can look like a sensor, a mentor, a test site, a supply chain or a route to scale.</p>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input placeholder="Search projects or domains" data-filter-input>
+            <select data-filter-type>
+                <option value="">All collaboration types</option>
+                <option value="technology">Technology</option>
+                <option value="funding">Funding</option>
+                <option value="mentorship">Mentorship</option>
+                <option value="testing">Testing</option>
+            </select>
+        </div>
+
+        <div class="opportunity-grid">
+            {% for project in projects %}
+                <a class="opportunity-card" 
+                   data-filter-item="{{ project.title }} {{ project.domain }}" 
+                   data-type="{{ project.domain|lower }}"
+                   href="{{ url_for('industry_opportunity', project_id=project.id) }}">
+                    <div class="opportunity-art">{{ project.title[:2]|upper }}</div>
+                    <span class="status status-in-progress">{{ project.status|title }}</span>
+                    <h3>{{ project.title }}</h3>
+                    <p>{{ project.organization }} · {{ project.domain }}</p>
+                    <div class="card-footer">
+                        <span>Needs technology + mentorship</span>
+                        <b>→</b>
+                    </div>
+                </a>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No active opportunities found</h2>
+                    <p>Check back soon as university teams post prototype collaboration requests.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

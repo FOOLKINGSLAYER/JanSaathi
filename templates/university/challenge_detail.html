@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block title %}Review challenge | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- University Sidebar -->
+    <aside class="side-nav university-side">
+        <p class="side-label">University workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="University navigation">
+            <a href="{{ url_for('university_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('university_challenges') }}">Challenge discovery</a>
+            <a href="{{ url_for('university_project', project_id=1) }}">Project workspace</a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <a class="back-link" href="{{ url_for('university_challenges') }}">← Back to discovery</a>
+
+        <div class="detail-head">
+            <div>
+                <div class="detail-meta">
+                    <span class="status status-{{ challenge.status|lower }}">
+                        {{ challenge.status|replace('_',' ')|title }}
+                    </span>
+                    <span>{{ challenge.category }}</span>
+                </div>
+                <h1>{{ challenge.title }}</h1>
+                <p>{{ challenge.location }} · Submitted {{ challenge.created_at }}</p>
+            </div>
+            <span class="priority priority-{{ challenge.priority|lower }}">
+                {{ challenge.priority }} priority
+            </span>
+        </div>
+
+        <div class="detail-grid">
+            <!-- Left: Community Context & AI Assist -->
+            <section class="surface detail-content">
+                <p class="section-kicker">Community context</p>
+                <p class="lead-copy">{{ challenge.description }}</p>
+
+                <div class="ai-summary">
+                    <span>✦</span>
+                    <div>
+                        <p class="section-kicker">AI-assisted understanding</p>
+                        <p>{{ challenge.ai_summary }}</p>
+                        <div class="tag-list">
+                            {% for keyword in challenge.keywords %}
+                                <span>{{ keyword }}</span>
+                            {% endfor %}
+                        </div>
+                        <small>Review this recommendation alongside local context.</small>
+                    </div>
+                </div>
+
+                <div class="action-row">
+                    <form method="post" action="{{ url_for('accept_challenge', challenge_id=challenge.id) }}">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                        <button class="primary-button" type="submit">
+                            Accept challenge <span>→</span>
+                        </button>
+                    </form>
+                    <button class="secondary-button" type="button" data-action="request-clarification">
+                        Request clarification
+                    </button>
+                </div>
+            </section>
+
+            <!-- Right: Academic Disciplines & Evidence -->
+            <aside class="surface review-aside">
+                <p class="section-kicker">Potential disciplines</p>
+                <div class="discipline-list">
+                    <div class="discipline">
+                        <span>Agricultural Engineering</span>
+                        <b>92%</b>
+                    </div>
+                    <div class="discipline">
+                        <span>IoT and Electronics</span>
+                        <b>78%</b>
+                    </div>
+                    <div class="discipline">
+                        <span>Data Science</span>
+                        <b>64%</b>
+                    </div>
+                </div>
+
+                <hr>
+
+                <p class="section-kicker">Evidence</p>
+                <strong class="big-number">{{ challenge.evidence }}</strong>
+                <small>items shared by the community</small>
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

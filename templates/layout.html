@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17375E">
+    <meta name="description" content="JanSaathi connects community challenges with universities, industry and government to build practical solutions.">
+    
+    <title>{% block title %}JanSaathi | Ideas for a Better India{% endblock %}</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Mukta:wght@500;600;700&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    {% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <!-- Top Utility Ribbon -->
+    <div class="utility-bar">
+        <div>JanSaathi <span>|</span> Societal Innovation Collaboration Portal</div>
+        <nav aria-label="Utility navigation">
+            <a href="{{ url_for('accessibility') }}">Accessibility</a>
+            <a href="#language">Language: English</a>
+            <a href="{{ url_for('help_page') }}">Help</a>
+            <a href="{{ url_for('contact') }}">Contact</a>
+        </nav>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="site-header">
+        <a class="brand" href="{{ url_for('index') }}">
+            <span class="brand-mark">JS</span>
+            <span>
+                JanSaathi
+                <small>Ideas for a Better India</small>
+            </span>
+        </a>
+
+        {% if current_user %}
+            <nav class="top-nav authenticated-nav" aria-label="Workspace navigation">
+                <a class="{% if nav_active('/' + current_user.role + '/dashboard') %}is-active{% endif %}" 
+                   {% if nav_active('/' + current_user.role + '/dashboard') %}aria-current="page"{% endif %} 
+                   href="{{ url_for(current_user.role + '_dashboard') }}">
+                   Dashboard
+                </a>
+
+                {% if current_user.role == 'citizen' %}
+                    <a class="{% if nav_active('/citizen/challenge') or nav_active('/citizen/challenges') %}is-active{% endif %}" 
+                       {% if nav_active('/citizen/challenge') or nav_active('/citizen/challenges') %}aria-current="page"{% endif %} 
+                       href="{{ url_for('citizen_challenges') }}">
+                       Explore
+                    </a>
+                {% elif current_user.role == 'university' %}
+                    <a class="{% if nav_active('/university/challenge') or nav_active('/university/challenges') or nav_active('/university/project') %}is-active{% endif %}" 
+                       {% if nav_active('/university/challenge') or nav_active('/university/challenges') or nav_active('/university/project') %}aria-current="page"{% endif %} 
+                       href="{{ url_for('university_challenges') }}">
+                       Explore
+                    </a>
+                {% elif current_user.role == 'industry' %}
+                    <a class="{% if nav_active('/industry/opportunity') or nav_active('/industry/opportunities') %}is-active{% endif %}" 
+                       {% if nav_active('/industry/opportunity') or nav_active('/industry/opportunities') %}aria-current="page"{% endif %} 
+                       href="{{ url_for('industry_opportunities') }}">
+                       Explore
+                    </a>
+                {% elif current_user.role == 'government' %}
+                    <a class="{% if nav_active('/government/dashboard') or nav_active('/government/challenges') or nav_active('/government/analytics') %}is-active{% endif %}" 
+                       {% if nav_active('/government/dashboard') or nav_active('/government/challenges') or nav_active('/government/analytics') %}aria-current="page"{% endif %} 
+                       href="{{ url_for('government_analytics') }}">
+                       Explore
+                    </a>
+                {% else %}
+                    <a class="{% if nav_active('/admin/dashboard') or nav_active('/admin/review') %}is-active{% endif %}" 
+                       {% if nav_active('/admin/dashboard') or nav_active('/admin/review') %}aria-current="page"{% endif %} 
+                       href="{{ url_for('admin_review') }}">
+                       Explore
+                    </a>
+                {% endif %}
+
+                <a href="#notifications">Notifications <span class="nav-count">3</span></a>
+            </nav>
+
+            <div class="header-actions">
+                <span class="user-greeting">{{ current_user.name }}</span>
+                <a class="text-link" href="{{ url_for('logout') }}">Log out</a>
+            </div>
+        {% else %}
+            <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="public-nav">Menu</button>
+            <nav id="public-nav" class="top-nav public-nav" aria-label="Main navigation">
+                <a class="{% if nav_active('/', true) %}is-active{% endif %}" 
+                   {% if nav_active('/', true) %}aria-current="page"{% endif %} 
+                   href="{{ url_for('index') }}">
+                   Home
+                </a>
+                <a class="{% if nav_active('/about') %}is-active{% endif %}" 
+                   {% if nav_active('/about') %}aria-current="page"{% endif %} 
+                   href="{{ url_for('about') }}">
+                   About
+                </a>
+                <a class="{% if nav_active('/how-it-works') %}is-active{% endif %}" 
+                   {% if nav_active('/how-it-works') %}aria-current="page"{% endif %} 
+                   href="{{ url_for('how_it_works') }}">
+                   How it works
+                </a>
+                <a class="{% if nav_active('/challenges') or nav_active('/search') %}is-active{% endif %}" 
+                   {% if nav_active('/challenges') or nav_active('/search') %}aria-current="page"{% endif %} 
+                   href="{{ url_for('challenges_directory') }}">
+                   Challenges
+                </a>
+                <a class="{% if nav_active('/impact') %}is-active{% endif %}" 
+                   {% if nav_active('/impact') %}aria-current="page"{% endif %} 
+                   href="{{ url_for('impact') }}">
+                   Impact
+                </a>
+                <a class="{% if nav_active('/contact') %}is-active{% endif %}" 
+                   {% if nav_active('/contact') %}aria-current="page"{% endif %} 
+                   href="{{ url_for('contact') }}">
+                   Contact
+                </a>
+            </nav>
+
+            <div class="header-actions">
+                <a class="search-link" href="{{ url_for('search') }}">Search</a>
+                <a class="text-link" href="{{ url_for('login') }}">Log in</a>
+                <a class="header-cta" href="{{ url_for('register') }}">Create account</a>
+            </div>
+        {% endif %}
+    </header>
+
+    <!-- Flash Alerts Stack -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-stack" aria-live="polite">
+                {% for category, message in messages %}
+                    <div class="flash flash-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- Page Body -->
+    <div id="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Site Footer -->
+    <footer class="site-footer">
+        <div class="footer-brand">
+            <span class="brand-mark">JS</span>
+            <strong>JanSaathi</strong>
+            <p>Ideas for a Better India.</p>
+            <small>Societal Innovation Collaboration Portal</small>
+        </div>
+
+        <div>
+            <strong>Explore</strong>
+            <a href="{{ url_for('about') }}">About</a>
+            <a href="{{ url_for('how_it_works') }}">How it works</a>
+            <a href="{{ url_for('search') }}">Challenges</a>
+            <a href="{{ url_for('impact') }}">Impact</a>
+        </div>
+
+        <div>
+            <strong>Support</strong>
+            <a href="{{ url_for('contact') }}">Contact</a>
+            <a href="{{ url_for('help_page') }}">Help and FAQs</a>
+            <a href="{{ url_for('sitemap') }}">Sitemap</a>
+            <a href="{{ url_for('accessibility') }}">Accessibility</a>
+        </div>
+
+        <div class="footer-note">
+            <strong>Prototype disclosure</strong>
+            <p>JanSaathi is a Smart India Hackathon prototype. It is not an official Government of India service.</p>
+            <span>Privacy · Terms · Feedback</span>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='javascript.js') }}" defer></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

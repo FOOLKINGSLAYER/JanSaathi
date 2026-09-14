@@ -1,0 +1,67 @@
+{% extends "layout.html" %}
+
+{% block title %}Contact JanSaathi | Support and Feedback{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Contact and feedback
+        </p>
+        <h1>Help shape the<br><em>next version of JanSaathi.</em></h1>
+        <p>For this prototype, contact is a feedback channel for questions, accessibility issues and ideas for the platform.</p>
+    </section>
+
+    <section class="contact-grid">
+        <aside class="contact-aside">
+            <span class="contact-symbol">↗</span>
+            <h2>JanSaathi Platform Team</h2>
+            <p>
+                Share the context behind your question. It helps us understand whether you need support with a challenge, 
+                a project or the platform itself.
+            </p>
+            <div class="contact-links">
+                <a href="{{ url_for('help_page') }}">Read help and FAQs →</a>
+                <a href="{{ url_for('accessibility') }}">Accessibility statement →</a>
+                <a href="{{ url_for('sitemap') }}">Browse the sitemap →</a>
+            </div>
+        </aside>
+
+        <form class="surface-form contact-form" onsubmit="event.preventDefault(); this.classList.add('submitted');">
+            <div class="form-two">
+                <label for="contact-name">
+                    Name
+                    <input id="contact-name" required placeholder="Your name">
+                </label>
+                <label for="contact-email">
+                    Email
+                    <input id="contact-email" type="email" required placeholder="you@example.com">
+                </label>
+            </div>
+
+            <label for="contact-subject">
+                Subject
+                <select id="contact-subject">
+                    <option>General feedback</option>
+                    <option>Bug report</option>
+                    <option>Accessibility issue</option>
+                    <option>Challenge support</option>
+                </select>
+            </label>
+
+            <label for="contact-message">
+                Message
+                <textarea id="contact-message" required rows="6" placeholder="Tell us what you would like to share..."></textarea>
+            </label>
+
+            <button class="primary-button" type="submit">
+                Send feedback <span>→</span>
+            </button>
+
+            <p class="form-success" role="status">
+                Thank you. Your feedback has been recorded for this prototype demonstration.
+            </p>
+        </form>
+    </section>
+</main>
+{% endblock %}

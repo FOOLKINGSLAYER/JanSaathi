@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+
+{% block title %}Industry workspace | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Industry Sidebar -->
+    <aside class="side-nav industry-side">
+        <p class="side-label">Industry workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Industry navigation">
+            <a class="side-active" href="{{ url_for('industry_dashboard') }}">
+                Overview
+            </a>
+            <a href="{{ url_for('industry_opportunities') }}">
+                Opportunities <span class="side-count">6</span>
+            </a>
+            <a href="{{ url_for('industry_opportunity', project_id=1) }}">
+                JalMitra project
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Industry / Startup / MSME</p>
+                <h1>Put capability<br><em>where it matters.</em></h1>
+                <p>Find university projects where your technology, mentorship or network can unlock progress.</p>
+            </div>
+            <a class="primary-button inline-button" href="{{ url_for('industry_opportunities') }}">
+                Explore opportunities <span>→</span>
+            </a>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <span>Open opportunities</span>
+                <strong>6</strong>
+                <small>Across 4 domains</small>
+            </div>
+            <div class="stat-card">
+                <span>Active collaborations</span>
+                <strong>2</strong>
+                <small>In progress</small>
+            </div>
+            <div class="stat-card">
+                <span>Mentorship hours</span>
+                <strong>38</strong>
+                <small>This quarter</small>
+            </div>
+            <div class="stat-card">
+                <span>Communities reached</span>
+                <strong>1.2k</strong>
+                <small>Demo estimate</small>
+            </div>
+        </div>
+
+        <section class="surface">
+            <div class="surface-head">
+                <div>
+                    <p class="section-kicker">A strong match</p>
+                    <h2>JalMitra needs a technology partner</h2>
+                </div>
+                <a class="text-link" href="{{ url_for('industry_opportunity', project_id=1) }}">
+                    View opportunity →
+                </a>
+            </div>
+
+            <div class="opportunity-preview">
+                <div class="opportunity-art">JM</div>
+                <div>
+                    <span class="status status-in-progress">Prototype stage</span>
+                    <h3>Low-cost soil moisture intelligence</h3>
+                    <p>National Institute of Technology · Agricultural Engineering · IoT</p>
+                    <div class="tag-list">
+                        <span>Technology</span>
+                        <span>Testing</span>
+                        <span>Mentorship</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</main>
+{% endblock %}

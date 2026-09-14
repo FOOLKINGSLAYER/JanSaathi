@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Create account | JanSaathi{% endblock %}
+{% block body_class %}auth-page{% endblock %}
+
+{% block content %}
+<main class="auth-layout">
+    <section class="auth-intro">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Join the ecosystem
+        </p>
+        <h1>Who are you<br><em>bringing with you?</em></h1>
+        <p>One account, one connected path. Choose the perspective you bring to community-led innovation.</p>
+        <div class="role-list">
+            <span>◉ Citizen / community</span>
+            <span>◉ University / HEI</span>
+            <span>◉ Industry / MSME</span>
+            <span>◉ Government</span>
+        </div>
+    </section>
+
+    <section class="auth-form-panel">
+        <form class="auth-card register-card" method="post">
+            <p class="section-kicker">Create account</p>
+            <h2>Start with your role</h2>
+            
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <div class="role-picker">
+                <label>
+                    <input type="radio" name="role" value="citizen" checked>
+                    <span>
+                        <b>Citizen</b>
+                        <small>Report a local challenge</small>
+                    </span>
+                </label>
+                <label>
+                    <input type="radio" name="role" value="university">
+                    <span>
+                        <b>University / HEI</b>
+                        <small>Bring expertise and teams</small>
+                    </span>
+                </label>
+                <label>
+                    <input type="radio" name="role" value="industry">
+                    <span>
+                        <b>Industry / MSME</b>
+                        <small>Collaborate and scale</small>
+                    </span>
+                </label>
+                <label>
+                    <input type="radio" name="role" value="government">
+                    <span>
+                        <b>Government</b>
+                        <small>Monitor and enable</small>
+                    </span>
+                </label>
+            </div>
+
+            <div class="form-two">
+                <label>
+                    Name
+                    <input name="name" required value="{{ form.name|default('') if form else '' }}" placeholder="Your name">
+                </label>
+                <label>
+                    Email
+                    <input name="email" type="email" required value="{{ form.email|default('') if form else '' }}" placeholder="you@example.com">
+                </label>
+            </div>
+
+            <label>
+                Organization <span class="optional">optional</span>
+                <input name="organization" placeholder="Institution, company or community group">
+            </label>
+
+            <div class="form-two">
+                <label>
+                    Password
+                    <input name="password" type="password" required placeholder="At least 8 characters">
+                </label>
+                <label>
+                    Confirm password
+                    <input name="confirm_password" type="password" required placeholder="Repeat password">
+                </label>
+            </div>
+
+            <button class="primary-button" type="submit">
+                Create account <span>→</span>
+            </button>
+
+            <p class="auth-footnote">
+                Already have an account? <a href="{{ url_for('login') }}">Log in</a>
+            </p>
+        </form>
+    </section>
+</main>
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ challenge.title }} | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Citizen Sidebar -->
+    <aside class="side-nav">
+        <p class="side-label">Citizen workspace</p>
+        <h3>{{ current_user.name }}</h3>
+        <nav class="side-nav-links" aria-label="Citizen navigation">
+            <a href="{{ url_for('citizen_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('citizen_challenges') }}">My challenges</a>
+            <a href="{{ url_for('submit_challenge') }}">Submit a challenge</a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <a class="back-link" href="{{ url_for('citizen_challenges') }}">← Back to my challenges</a>
+
+        <div class="detail-head">
+            <div>
+                <div class="detail-meta">
+                    <span class="status status-{{ challenge.status|lower }}">
+                        {{ challenge.status|replace('_',' ')|title }}
+                    </span>
+                    <span>{{ challenge.created_at }}</span>
+                </div>
+                <h1>{{ challenge.title }}</h1>
+                <p>{{ challenge.location }} · {{ challenge.category }}</p>
+            </div>
+            <span class="priority priority-{{ challenge.priority|lower }}">
+                {{ challenge.priority }} priority
+            </span>
+        </div>
+
+        <div class="detail-grid">
+            <!-- Left: Description & AI Summary -->
+            <section class="surface detail-content">
+                <p class="section-kicker">The challenge</p>
+                <p class="lead-copy">{{ challenge.description }}</p>
+
+                <div class="tag-list">
+                    {% for keyword in challenge.keywords %}
+                        <span>{{ keyword }}</span>
+                    {% endfor %}
+                </div>
+
+                <div class="ai-summary">
+                    <span>✦</span>
+                    <div>
+                        <p class="section-kicker">AI-assisted summary</p>
+                        <p>{{ challenge.ai_summary }}</p>
+                        <small>Recommendation for review, not a final decision.</small>
+                    </div>
+                </div>
+
+                {% if project %}
+                    <div class="project-link">
+                        <div>
+                            <p class="section-kicker">Project formed</p>
+                            <strong>{{ project.title }}</strong>
+                            <small>{{ project.progress }}% progress · {{ project.status|title }}</small>
+                        </div>
+                        <a class="text-link" href="#project">View project →</a>
+                    </div>
+                {% endif %}
+            </section>
+
+            <!-- Right: Vertical Stepper -->
+            <aside class="surface timeline">
+                <p class="section-kicker">Progress timeline</p>
+                {% for step in ['Submitted', 'Under review', 'Validated', 'University assigned', 'Project created', 'Solution development', 'Testing', 'Deployment'] %}
+                    <div class="timeline-step {% if loop.index <= 4 %}done{% endif %}">
+                        <span></span>
+                        <div>
+                            <strong>{{ step }}</strong>
+                            {% if loop.index == 4 %}
+                                <small>National Institute of Technology</small>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

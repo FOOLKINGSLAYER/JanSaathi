@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}How It Works | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> The journey
+        </p>
+        <h1>From lived experience<br><em>to measurable progress.</em></h1>
+        <p>Each stage gives the next person enough context to contribute responsibly.</p>
+    </section>
+
+    <section class="journey-detail">
+        <div class="journey-rail" aria-hidden="true"></div>
+
+        {% for number, title, description, stakeholders, output in [
+            ('01', 'A community identifies a challenge', 'A citizen, community organization or local body records a problem with its location and lived context.', 'Citizen / community', 'Challenge submission'),
+            ('02', 'AI structures the challenge', 'A limited assist suggests a category, summary, priority and relevant keywords.', 'AI assist + citizen', 'Structured understanding'),
+            ('03', 'People validate the need', 'Platform review checks context, evidence and whether clarification is needed.', 'Platform administrator', 'Validated challenge'),
+            ('04', 'A university engages', 'Relevant institutions discover the challenge and assess research relevance.', 'University / HEI', 'Research or project team'),
+            ('05', 'Partners collaborate', 'Industry and MSME partners can contribute technology, mentorship, funding, testing or deployment support.', 'Industry / startup / MSME', 'Collaboration plan'),
+            ('06', 'The team prototypes and tests', 'Faculty, students and partners learn with the community through a practical project.', 'Project team + community', 'Tested solution'),
+            ('07', 'The solution moves toward deployment', 'Progress, milestones and implementation needs remain visible to institutional partners.', 'Government + partners', 'Deployment pathway'),
+            ('08', 'Impact is monitored', 'Outcomes and lessons can inform the next challenge and the next collaboration.', 'All stakeholders', 'Measurable outcome')
+        ] %}
+            <article class="journey-stage">
+                <div class="stage-number">{{ number }}</div>
+                <div>
+                    <p class="section-kicker">{{ stakeholders }}</p>
+                    <h2>{{ title }}</h2>
+                    <p>{{ description }}</p>
+                    <div class="stage-output">
+                        <span>Output</span>
+                        <strong>{{ output }}</strong>
+                    </div>
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

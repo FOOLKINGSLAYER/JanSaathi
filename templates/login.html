@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block title %}Log in | JanSaathi{% endblock %}
+{% block body_class %}login-page{% endblock %}
+{% block content %}
+<section class="login-shell">
+    <div class="login-story">
+        <div class="eyebrow"><span class="eyebrow-dot"></span> Societal Innovation Collaboration Portal</div>
+        <h1>Ideas for a<br><em>better India.</em></h1>
+        <p class="story-lede">JanSaathi brings the people who see a challenge together with the people who can help solve it.</p>
+        <div class="story-path" aria-label="How JanSaathi connects people">
+            <div class="path-item"><span class="path-number">01</span><strong>People</strong><small>Spot what matters locally</small></div>
+            <div class="path-line"></div>
+            <div class="path-item"><span class="path-number">02</span><strong>Ideas</strong><small>Turn insight into action</small></div>
+            <div class="path-line"></div>
+            <div class="path-item"><span class="path-number">03</span><strong>Solutions</strong><small>Build impact together</small></div>
+        </div>
+        <div class="stakeholder-row">
+            <span>Citizens</span><span>Universities</span><span>Industry</span><span>Government</span>
+        </div>
+    </div>
+
+    <div class="login-panel">
+        <div class="auth-card">
+            <div class="auth-heading">
+                <p class="section-kicker">Welcome back</p>
+                <h2>Log in to JanSaathi</h2>
+                <p>Pick up where your community's next solution begins.</p>
+            </div>
+            <div class="auth-tabs" role="tablist" aria-label="Authentication options">
+                <span class="auth-tab active" role="tab" aria-selected="true">Log in</span>
+                <a class="auth-tab" href="{{ url_for('register') }}" role="tab" aria-selected="false">Create account</a>
+            </div>
+            <div class="workspace-login-links" aria-label="Choose a JanSaathi workspace">
+                <p>Log in to your workspace</p>
+                <div class="workspace-login-grid">
+                    <a href="#email" class="workspace-login-link"><strong>Citizen</strong><small>Community challenges</small></a>
+                    <a href="#email" class="workspace-login-link"><strong>University / HEI</strong><small>Research and teams</small></a>
+                    <a href="#email" class="workspace-login-link"><strong>Industry / MSME</strong><small>Collaborate and scale</small></a>
+                    <a href="#email" class="workspace-login-link"><strong>Government</strong><small>Monitor and enable</small></a>
+                </div>
+            </div>
+            <form method="post" action="{{ url_for('login') }}" class="login-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <div class="field-group">
+                    <label for="email">Email address</label>
+                    <input id="email" name="email" type="email" value="{{ email|default('') }}" placeholder="you@example.com" autocomplete="email" required autofocus>
+                </div>
+                <div class="field-group">
+                    <div class="field-label-row"><label for="password">Password</label><a href="#forgot-password">Forgot password?</a></div>
+                    <div class="password-input"><input id="password" name="password" type="password" placeholder="Enter your password" autocomplete="current-password" required><button type="button" class="password-toggle" aria-label="Show password" data-password-toggle>Show</button></div>
+                </div>
+                <label class="check-row"><input type="checkbox" name="remember"><span>Remember me on this device</span></label>
+                <button type="submit" class="primary-button">Log in <span aria-hidden="true">&#8594;</span></button>
+            </form>
+            <div class="divider"><span>or continue with</span></div>
+            <div class="social-actions"><button type="button" class="social-button" disabled><span class="social-icon google">G</span>Google</button><button type="button" class="social-button" disabled><span class="social-icon microsoft">&#9632;</span>Microsoft</button><button type="button" class="social-button coming-soon" disabled>Aadhaar <small>soon</small></button></div>
+            <p class="auth-footnote">New to JanSaathi? <a href="{{ url_for('register') }}">Create an account</a></p>
+        </div>
+        <p class="demo-note"><span class="demo-icon">i</span><span><strong>Prototype access</strong><br>Use <b>citizen@jansaathi.in</b> with <b>JanSaathi@123</b> to explore the first demo role.</span></p>
+    </div>
+</section>
+{% endblock %}

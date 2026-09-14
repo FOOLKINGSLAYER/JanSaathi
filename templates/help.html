@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block title %}Help and FAQs | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Help and FAQs
+        </p>
+        <h1>Understand the<br><em>JanSaathi journey.</em></h1>
+        <p>Clear answers for citizens, universities, industry partners and government users.</p>
+    </section>
+
+    <section class="faq-list">
+        {% for question, answer in [
+            ('What is JanSaathi?', 'JanSaathi is a prototype collaboration portal that connects community challenges with university expertise, industry support and government monitoring.'),
+            ('Who can participate?', 'Citizens and community organizations can report challenges. Universities, industry, government and platform administrators each have role-specific workspaces.'),
+            ('How do I submit a challenge?', 'Create a citizen account, open Submit a challenge, describe the local context, choose a category and provide the location. Evidence is optional.'),
+            ('How does AI work?', 'Gemini can suggest a category, priority, summary, keywords and relevant domains. Results are cached, request-limited and always presented as recommendations for human review.'),
+            ('How does validation work?', 'Platform administrators review context and evidence before a challenge is connected with a university or other organization.'),
+            ('How does the status get tracked?', 'A challenge moves through clear stages such as Submitted, Under review, Validated, Assigned, Project created, Testing and Deployment.')
+        ] %}
+            <details>
+                <summary>
+                    {{ question }}
+                    <span>+</span>
+                </summary>
+                <p>{{ answer }}</p>
+            </details>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

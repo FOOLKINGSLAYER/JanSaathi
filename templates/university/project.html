@@ -1,0 +1,98 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ project.title }} | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- University Sidebar -->
+    <aside class="side-nav university-side">
+        <p class="side-label">University workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="University navigation">
+            <a href="{{ url_for('university_dashboard') }}">Overview</a>
+            <a href="{{ url_for('university_challenges') }}">Challenge discovery</a>
+            <a class="side-active" href="{{ url_for('university_project', project_id=project.id) }}">
+                Project workspace
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Project Workspace -->
+    <section class="workspace">
+        <div class="project-banner">
+            <div>
+                <p class="section-kicker">Project workspace · From challenge to solution</p>
+                <h1>{{ project.title }}</h1>
+                <p>{{ project.domain }} · {{ project.organization }}</p>
+            </div>
+            <span class="status status-in-progress">{{ project.status|title }}</span>
+        </div>
+
+        <div class="progress-strip">
+            <div class="progress-meta">
+                <span>Overall progress</span>
+                <strong>{{ project.progress }}%</strong>
+            </div>
+            <div class="progress-track">
+                <i {{ ('style="width: ' ~ project.progress ~ '%;"')|safe }}></i>
+            </div>
+            <small>Target deployment · {{ project.target_date }}</small>
+        </div>
+
+        <div class="project-grid">
+            <!-- Left: Milestone Tracker -->
+            <section class="surface">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Milestones</p>
+                        <h2>Build in the open</h2>
+                    </div>
+                    <button class="secondary-button" type="button" data-action="add-milestone">
+                        + Add milestone
+                    </button>
+                </div>
+
+                <div class="milestone-list">
+                    {% for milestone, state in project.milestones %}
+                        <div class="milestone {{ state }}">
+                            <span class="milestone-step">{{ loop.index }}</span>
+                            <div class="milestone-content">
+                                <strong>{{ milestone }}</strong>
+                                <small>
+                                    {{ 'Complete' if state == 'complete' else 'In progress' if state == 'active' else 'Planned next' }}
+                                </small>
+                            </div>
+                            <b class="milestone-status">
+                                {{ '✓' if state == 'complete' else '→' if state == 'active' else '·' }}
+                            </b>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Right: Team & Partner Details -->
+            <aside class="surface team-card">
+                <p class="section-kicker">Project team</p>
+                <h3>{{ project.faculty }}</h3>
+                <p class="mentor-title">Faculty mentor</p>
+
+                <div class="team-avatars">
+                    <i>MI</i>
+                    <i>SK</i>
+                    <i>RV</i>
+                    <i class="avatar-more">+5</i>
+                </div>
+                <span class="team-summary">{{ project.members }} members · 3 disciplines</span>
+
+                <hr>
+
+                <p class="section-kicker">Industry partner</p>
+                <strong>{{ project.industry_partner }}</strong>
+                <a class="text-link" href="{{ url_for('industry_opportunity', project_id=project.id) }}">
+                    View opportunity →
+                </a>
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

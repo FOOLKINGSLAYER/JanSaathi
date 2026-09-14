@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ dashboard_name }} dashboard | JanSaathi{% endblock %}
+
+{% block content %}
+<section class="placeholder-page">
+    <p class="section-kicker">Authenticated prototype</p>
+    <h1>{{ dashboard_name }} dashboard</h1>
+    <p>Your role-aware JanSaathi session is active. This workspace will be built in the next phase.</p>
+    <a class="primary-button inline-button" href="{{ url_for('logout') }}">
+        Log out <span aria-hidden="true">&#8594;</span>
+    </a>
+</section>
+{% endblock %}

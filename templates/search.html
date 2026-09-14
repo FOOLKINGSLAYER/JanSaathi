@@ -1,0 +1,74 @@
+{% extends "layout.html" %}
+
+{% block title %}Search challenges | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Public challenge directory
+        </p>
+        <h1>Find a challenge<br><em>where you can help.</em></h1>
+        <p>
+            Search prototype challenges by title, category, location or keywords. 
+            Results are demo data for this hackathon prototype.
+        </p>
+    </section>
+
+    <section class="search-results">
+        <form class="portal-search" method="get" action="{{ url_for('search') }}">
+            <label for="challenge-search">Search challenges</label>
+            <div>
+                <input id="challenge-search" 
+                       name="q" 
+                       value="{{ query }}" 
+                       placeholder="Try water, agriculture or Nashik">
+                <button class="primary-button" type="submit">
+                    Search <span>→</span>
+                </button>
+            </div>
+        </form>
+
+        <div class="results-heading">
+            <p class="section-kicker">
+                {{ challenges|length }} result{% if challenges|length != 1 %}s{% endif %}
+            </p>
+            {% if query %}
+                <h2>Results for “{{ query }}”</h2>
+            {% else %}
+                <h2>Challenges open for discovery</h2>
+            {% endif %}
+        </div>
+
+        <div class="search-list">
+            {% for challenge in challenges %}
+                <article class="search-item">
+                    <div>
+                        <div class="detail-meta">
+                            <span class="status status-{{ challenge.status|lower }}">
+                                {{ challenge.status|replace('_',' ')|title }}
+                            </span>
+                            <span>{{ challenge.category }} · {{ challenge.location }}</span>
+                        </div>
+                        <h3>{{ challenge.title }}</h3>
+                        <p>{{ challenge.ai_summary }}</p>
+                        <div class="tag-list">
+                            {% for keyword in challenge.keywords %}
+                                <span>{{ keyword }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <span class="priority priority-{{ challenge.priority|lower }}">
+                        {{ challenge.priority }} priority
+                    </span>
+                </article>
+            {% else %}
+                <div class="surface empty-state">
+                    <h2>No matching challenges</h2>
+                    <p>Try a broader keyword or return to the public challenge directory.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+</main>
+{% endblock %}

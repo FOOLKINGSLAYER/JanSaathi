@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}Review queue | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="side-nav admin-side">
+        <p class="side-label">Platform administration</p>
+        <h3>JanSaathi control room</h3>
+        
+        <nav class="side-nav-links" aria-label="Admin navigation">
+            <a href="{{ url_for('admin_dashboard') }}">
+                Overview
+            </a>
+            <a class="side-active" href="{{ url_for('admin_review') }}">
+                Review queue
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Review Queue Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Human review</p>
+                <h1>Give each challenge<br><em>the attention it deserves.</em></h1>
+                <p>Check context, evidence and AI suggestions before connecting a challenge to an institution.</p>
+            </div>
+            <span class="queue-count">8 waiting</span>
+        </div>
+
+        <section class="surface challenge-list">
+            {% for challenge in challenges %}
+                <div class="review-row">
+                    <div class="review-priority">
+                        <span class="priority priority-{{ challenge.priority|lower }}">{{ challenge.priority }}</span>
+                        <small>{{ challenge.created_at }}</small>
+                    </div>
+
+                    <div class="challenge-main">
+                        <strong>{{ challenge.title }}</strong>
+                        <small>{{ challenge.location }} · {{ challenge.category }} · {{ challenge.evidence }} evidence items</small>
+                    </div>
+
+                    <div class="review-actions">
+                        <a class="secondary-button" href="{{ url_for('university_challenge_detail', challenge_id=challenge.id) }}">Open review <span>→</span></a>
+                        <form method="post" action="{{ url_for('admin_review') }}">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                            <input type="hidden" name="challenge_id" value="{{ challenge.id }}">
+                            <select name="status" aria-label="Status for {{ challenge.title }}">
+                                {% for status in ['UNDER_REVIEW', 'ASSIGNED', 'RESOLVED', 'REJECTED'] %}<option value="{{ status }}" {% if challenge.status == status %}selected{% endif %}>{{ status|replace('_', ' ')|title }}</option>{% endfor %}
+                            </select>
+                            <button class="primary-button" type="submit">Save</button>
+                        </form>
+                    </div>
+                </div>
+            {% endfor %}
+        </section>
+    </section>
+</main>
+{% endblock %}

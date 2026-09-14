@@ -1,0 +1,145 @@
+{% extends "layout.html" %}
+
+{% block title %}Impact Preview | JanSaathi{% endblock %}
+
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero impact-hero">
+        <div>
+            <p class="eyebrow">
+                <span class="eyebrow-dot"></span> Impact preview
+            </p>
+            <h1>Make the work visible, from first report to field test.</h1>
+        </div>
+        <div>
+            <p>
+                JanSaathi is designed to connect activity across the ecosystem. 
+                The figures below are prototype data for demonstration, not verified public adoption.
+            </p>
+            <span class="data-label">Prototype Data · September 2026</span>
+        </div>
+    </section>
+
+    <section class="section-wrap impact-overview">
+        <div class="impact-intro">
+            <p class="section-kicker">A connected view</p>
+            <h2>Progress is more than a number.</h2>
+            <p>
+                It includes the challenge understood, the institution engaged, 
+                the project formed and the solution tested with the people it is meant to serve.
+            </p>
+        </div>
+
+        <div class="metric-grid large">
+            <div>
+                <strong>{{ metrics.challenges }}</strong>
+                <span>Challenges identified</span>
+                <small>Prototype data</small>
+            </div>
+            <div>
+                <strong>{{ metrics.projects }}</strong>
+                <span>Projects initiated</span>
+                <small>Prototype data</small>
+            </div>
+            <div>
+                <strong>—</strong>
+                <span>Collaborations formed</span>
+                <small>Tracked as the network grows</small>
+            </div>
+            <div>
+                <strong>{{ metrics.deployed }}</strong>
+                <span>Solutions deployed</span>
+                <small>Prototype data</small>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-wrap impact-chart-section">
+        <div class="section-heading-row">
+            <div>
+                <p class="section-kicker">Solution lifecycle</p>
+                <h2>Where challenges are moving</h2>
+            </div>
+            <p class="chart-note">Illustrative view · not official statistics</p>
+        </div>
+
+        <div class="chart-layout">
+            <div class="chart-panel">
+                <canvas id="impactChart" height="150" aria-label="Illustrative challenge lifecycle chart"></canvas>
+            </div>
+            <div class="chart-reading">
+                <p class="section-kicker">How to read this</p>
+                <p>The greatest value of this view is not comparison. It is knowing which handoff needs attention next.</p>
+                <ul>
+                    <li>Identify and understand</li>
+                    <li>Validate and connect</li>
+                    <li>Build and test</li>
+                    <li>Deploy and learn</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="focus-band">
+        <div class="section-wrap">
+            <p class="section-kicker">Focus areas</p>
+            <h2>Problems that communities are working on.</h2>
+            <div class="focus-list">
+                {% for item in [
+                    'Education',
+                    'Healthcare',
+                    'Agriculture',
+                    'Water & Sanitation',
+                    'Environment',
+                    'Accessibility',
+                    'Rural Development',
+                    'Public Infrastructure'
+                ] %}
+                    <span>{{ item }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        const canvas = document.getElementById('impactChart');
+        if (canvas && window.Chart) {
+            new Chart(canvas, {
+                type: 'bar',
+                data: {
+                    labels: ['Identified', 'Validated', 'Assigned', 'Project', 'Testing', 'Deployed'],
+                    datasets: [{
+                        label: 'Prototype data',
+                        data: [48, 31, 22, 14, 8, 3],
+                        backgroundColor: '#155A8A',
+                        borderRadius: 2
+                    }]
+                },
+                options: {
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Illustrative count' },
+                            grid: { color: '#e1e7eb' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

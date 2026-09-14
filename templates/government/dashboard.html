@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}Government overview | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Government Sidebar -->
+    <aside class="side-nav government-side">
+        <p class="side-label">Government workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Government navigation">
+            <a class="side-active" href="{{ url_for('government_dashboard') }}">Overview</a>
+            <a href="{{ url_for('government_challenges') }}">All challenges</a>
+            <a href="{{ url_for('government_analytics') }}">Analytics</a>
+        </nav>
+    </aside>
+
+    <!-- Main Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Government monitoring</p>
+                <h1>A clear view of progress.</h1>
+                <p>Follow community needs, institutional participation and solution delivery across the ecosystem.</p>
+            </div>
+            <a class="quiet-button" href="{{ url_for('government_analytics') }}">
+                Open analytics <span>↗</span>
+            </a>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <span>Total challenges</span>
+                <strong>{{ challenges|length + 24 }}</strong>
+                <small>Demo data · +12% this month</small>
+            </div>
+            <div class="stat-card">
+                <span>Active projects</span>
+                <strong>{{ projects|length + 7 }}</strong>
+                <small>Across 9 districts</small>
+            </div>
+            <div class="stat-card">
+                <span>University participation</span>
+                <strong>18</strong>
+                <small>Institutions engaged</small>
+            </div>
+            <div class="stat-card">
+                <span>Deployed solutions</span>
+                <strong>12</strong>
+                <small>Demo data</small>
+            </div>
+        </div>
+
+        <div class="workspace-grid">
+            <!-- Left: Live Portfolio Feed -->
+            <section class="surface">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Live portfolio</p>
+                        <h2>Latest challenge movement</h2>
+                    </div>
+                    <a class="text-link" href="{{ url_for('government_challenges') }}">View all →</a>
+                </div>
+
+                <div class="challenge-feed">
+                    {% for challenge in challenges %}
+                        <div class="challenge-row">
+                            <span class="challenge-marker">{{ challenge.category[:2]|upper }}</span>
+                            <span class="challenge-main">
+                                <strong>{{ challenge.title }}</strong>
+                                <small>{{ challenge.location }} · {{ challenge.assigned_institution }}</small>
+                            </span>
+                            <span class="status status-{{ challenge.status|lower }}">
+                                {{ challenge.status|replace('_',' ')|title }}
+                            </span>
+                        </div>
+                    {% else %}
+                        <div class="empty-state">
+                            <p>No recorded challenges in portfolio.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Right: District Pulse CSS Bar Visualizer -->
+            <aside class="surface mini-chart">
+                <p class="section-kicker">District pulse</p>
+                <h3>Where attention is moving</h3>
+                <div class="bars" aria-label="District activity bar visualizer">
+                    <i style="--bar-height: 72%;" data-tooltip="72%"><b>Nashik</b></i>
+                    <i style="--bar-height: 52%;" data-tooltip="52%"><b>Beed</b></i>
+                    <i style="--bar-height: 86%;" data-tooltip="86%"><b>Udupi</b></i>
+                    <i style="--bar-height: 41%;" data-tooltip="41%"><b>Jaipur</b></i>
+                </div>
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

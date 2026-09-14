@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}Government challenge monitor | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Government Sidebar -->
+    <aside class="side-nav government-side">
+        <p class="side-label">Government workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Government navigation">
+            <a href="{{ url_for('government_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('government_challenges') }}">All challenges</a>
+            <a href="{{ url_for('government_analytics') }}">Analytics</a>
+        </nav>
+    </aside>
+
+    <!-- Challenge Monitor Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Portfolio monitor</p>
+                <h1>Every challenge has a place.</h1>
+                <p>Filter the portfolio by district, domain and stage to identify where support can unlock progress.</p>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input placeholder="Search by title or district" data-filter-input>
+            <select data-filter-district>
+                <option value="">All districts</option>
+                <option value="nashik">Nashik</option>
+                <option value="beed">Beed</option>
+                <option value="udupi">Udupi</option>
+                <option value="jaipur">Jaipur</option>
+            </select>
+            <select data-filter-stage>
+                <option value="">All stages</option>
+                <option value="validation">Validation</option>
+                <option value="university evaluation">University evaluation</option>
+                <option value="deployment">Deployment</option>
+            </select>
+        </div>
+
+        <section class="surface challenge-list">
+            {% for challenge in challenges %}
+                <div class="challenge-row" 
+                     data-filter-item="{{ challenge.title }} {{ challenge.location }} {{ challenge.category }} {{ challenge.stage }}"
+                     data-district="{{ challenge.location|lower }}"
+                     data-stage="{{ challenge.stage|lower }}">
+                    <span class="challenge-marker">{{ challenge.category[:2]|upper }}</span>
+                    <span class="challenge-main">
+                        <strong>{{ challenge.title }}</strong>
+                        <small>{{ challenge.location }} · {{ challenge.category }} · {{ challenge.stage }}</small>
+                    </span>
+                    <span class="priority priority-{{ challenge.priority|lower }}">{{ challenge.priority }}</span>
+                    <span class="status status-{{ challenge.status|lower }}">{{ challenge.status|replace('_',' ')|title }}</span>
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No portfolio challenges found</h2>
+                    <p>Adjust your filter parameters or search term to discover records.</p>
+                </div>
+            {% endfor %}
+        </section>
+    </section>
+</main>
+{% endblock %}

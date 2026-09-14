@@ -1,0 +1,28 @@
+{% extends "layout.html" %}{% block title %}JanSaathi | Ideas for a Better India{% endblock %}{% block body_class %}public-page{% endblock %}{% block content %}<main class="public-main">
+<section class="hero-band" aria-label="JanSaathi hero section">
+    <div class="hero-inner">
+        <div class="hero-copy">
+            <div class="brand-stack">
+                <span class="brand-rule"></span>
+                <span class="brand-label">JANSAATHI</span>
+            </div>
+            <p class="hero-subtitle">Societal Innovation Collaboration Portal</p>
+            <h1>Connecting<br>challenges.<br><span>Building solutions.</span><br><em>Creating impact.</em></h1>
+            <p class="hero-lede">JanSaathi connects communities, universities, industry and government to turn real-world challenges into practical, scalable solutions.</p>
+            <div class="hero-actions">
+                <a class="primary-button inline-button" href="{{ url_for('search') }}">Explore Challenges <span>→</span></a>
+                <a class="secondary-button" href="{{ url_for('submit_challenge') if current_user and current_user.role == 'citizen' else url_for('register') }}">Submit a Challenge <span>→</span></a>
+            </div>
+            <div class="hero-disclosure">
+                <span class="disclosure-line"></span>
+                <div>
+                    <p>Prototype platform for the Smart India Hackathon</p>
+                    <p>Not an official Government of India service</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</section>
+</main>{% endblock %}

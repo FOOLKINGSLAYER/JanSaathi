@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ project.title }} | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Industry Sidebar -->
+    <aside class="side-nav industry-side">
+        <p class="side-label">Industry workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Industry navigation">
+            <a href="{{ url_for('industry_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('industry_opportunities') }}">Opportunities</a>
+        </nav>
+    </aside>
+
+    <!-- Opportunity Detail Workspace -->
+    <section class="workspace">
+        <a class="back-link" href="{{ url_for('industry_opportunities') }}">← Back to opportunities</a>
+
+        <div class="detail-head">
+            <div>
+                <div class="detail-meta">
+                    <span class="status status-in-progress">Prototype stage</span>
+                    <span>{{ project.domain }}</span>
+                </div>
+                <h1>{{ project.title }}</h1>
+                <p>{{ project.organization }} · Target {{ project.target_date }}</p>
+            </div>
+            <span class="progress-pill">{{ project.progress }}% progress</span>
+        </div>
+
+        <div class="detail-grid">
+            <!-- Left: Scope & Interest Expression -->
+            <section class="surface detail-content">
+                <p class="section-kicker">The challenge behind the project</p>
+                <p class="lead-copy">{{ challenge.description }}</p>
+
+                <h3>What the team is building</h3>
+                <p>{{ project.description }}</p>
+
+                <div class="tag-list">
+                    <span>Technology</span>
+                    <span>Mentorship</span>
+                    <span>Field testing</span>
+                </div>
+
+                <form class="interest-form" method="post" action="{{ url_for('industry_interest', project_id=project.id) }}">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                    <label>
+                        How could your organization help?
+                        <select name="type">
+                            <option>Technology</option>
+                            <option>Mentorship</option>
+                            <option>Funding</option>
+                            <option>Testing</option>
+                            <option>Deployment</option>
+                        </select>
+                    </label>
+                    <button class="primary-button" type="submit">
+                        Express interest <span>→</span>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Right: Impact Projections & Faculty Info -->
+            <aside class="surface review-aside">
+                <p class="section-kicker">Expected impact</p>
+                
+                <div class="impact-line">
+                    <strong>2,400</strong>
+                    <span>smallholder farmers in reach</span>
+                </div>
+                
+                <div class="impact-line">
+                    <strong>30%</strong>
+                    <span>potential water savings</span>
+                </div>
+                
+                <hr>
+
+                <p class="section-kicker">University lead</p>
+                <strong>{{ project.faculty }}</strong>
+                <small>Faculty mentor · {{ project.members }} team members</small>
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

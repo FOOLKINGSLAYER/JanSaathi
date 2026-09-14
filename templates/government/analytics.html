@@ -1,0 +1,160 @@
+{% extends "layout.html" %}
+
+{% block title %}Government analytics | JanSaathi{% endblock %}
+
+{% block head %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Government Sidebar -->
+    <aside class="side-nav government-side">
+        <p class="side-label">Government workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="Government navigation">
+            <a href="{{ url_for('government_dashboard') }}">Overview</a>
+            <a href="{{ url_for('government_challenges') }}">All challenges</a>
+            <a class="side-active" href="{{ url_for('government_analytics') }}">Analytics</a>
+        </nav>
+    </aside>
+
+    <!-- Analytics Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Analytics centre</p>
+                <h1>Progress you can act on.</h1>
+                <p>Illustrative prototype data, arranged to support oversight conversations.</p>
+            </div>
+            <span class="demo-label">Prototype data · September 2026</span>
+        </div>
+
+        <div class="analytics-grid">
+            <!-- Domain Distribution -->
+            <section class="surface chart-panel">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Challenge distribution</p>
+                        <h2>What communities are raising</h2>
+                    </div>
+                </div>
+                <div class="canvas-container doughnut-wrap">
+                    <canvas id="categoryChart" height="150" aria-label="Distribution by challenge category"></canvas>
+                </div>
+            </section>
+
+            <!-- Lifecycle Stage Funnel -->
+            <section class="surface chart-panel">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Journey health</p>
+                        <h2>Challenges by stage</h2>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="stageChart" height="150" aria-label="Challenges by stage count"></canvas>
+                </div>
+            </section>
+
+            <!-- Institutional Trends -->
+            <section class="surface wide-chart">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Participation</p>
+                        <h2>Institutional collaboration over time</h2>
+                    </div>
+                </div>
+                <div class="canvas-container">
+                    <canvas id="trendChart" height="80" aria-label="Collaboration growth line chart"></canvas>
+                </div>
+            </section>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    window.addEventListener('DOMContentLoaded', () => {
+        if (!window.Chart) return;
+
+        const commonScales = {
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { color: '#e2e8f0' },
+                    ticks: { color: '#64748b', font: { family: "'Noto Sans', sans-serif" } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#64748b', font: { family: "'Noto Sans', sans-serif" } }
+                }
+            }
+        };
+
+        // 1. Doughnut: Distribution
+        new Chart(document.getElementById('categoryChart'), {
+            type: 'doughnut',
+            data: {
+                labels: ['Agriculture', 'Water', 'Environment', 'Education', 'Other'],
+                datasets: [{
+                    data: [28, 21, 18, 14, 19],
+                    backgroundColor: ['#17375e', '#0e7490', '#0284c7', '#f37021', '#10b981'],
+                    borderWidth: 2,
+                    borderColor: '#ffffff'
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 16,
+                            color: '#334155',
+                            font: { family: "'Noto Sans', sans-serif", size: 12 }
+                        }
+                    }
+                },
+                cutout: '68%'
+            }
+        });
+
+        // 2. Bar: Stage Breakdown
+        new Chart(document.getElementById('stageChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Review', 'Validated', 'Assigned', 'Project', 'Testing', 'Deployed'],
+                datasets: [{
+                    data: [18, 14, 10, 8, 5, 3],
+                    backgroundColor: '#0e7490',
+                    borderRadius: 4
+                }]
+            },
+            options: commonScales
+        });
+
+        // 3. Line: Trends Over Time
+        new Chart(document.getElementById('trendChart'), {
+            type: 'line',
+            data: {
+                labels: ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                datasets: [{
+                    data: [12, 18, 22, 29, 37, 48],
+                    borderColor: '#f37021',
+                    backgroundColor: 'rgba(243, 112, 33, 0.12)',
+                    fill: true,
+                    tension: 0.35,
+                    pointBackgroundColor: '#f37021',
+                    pointRadius: 4
+                }]
+            },
+            options: commonScales
+        });
+    });
+</script>
+{% endblock %}

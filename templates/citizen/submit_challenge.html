@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block title %}Submit a challenge | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Citizen Sidebar -->
+    <aside class="side-nav">
+        <p class="side-label">Citizen workspace</p>
+        <h3>{{ current_user.name }}</h3>
+        <nav class="side-nav-links" aria-label="Citizen navigation">
+            <a href="{{ url_for('citizen_dashboard') }}">Overview</a>
+            <a href="{{ url_for('citizen_challenges') }}">My challenges</a>
+            <a class="side-active" href="{{ url_for('submit_challenge') }}">Submit a challenge</a>
+        </nav>
+    </aside>
+
+    <!-- Submission Workspace -->
+    <section class="workspace narrow-workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Start a new thread</p>
+                <h1>What needs to change?</h1>
+                <p>Describe the challenge as you experience it. JanSaathi will prepare an initial summary for review.</p>
+            </div>
+        </div>
+
+        <form class="surface-form large-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <label>
+                Challenge title
+                <input name="title" required value="{{ form.title|default('') if form else '' }}" placeholder="e.g. Farmers need a simpler way to know when to irrigate">
+            </label>
+
+            <label>
+                Tell us what is happening
+                <textarea name="description" required rows="7" placeholder="Describe who is affected, what is happening today and why it matters...">{{ form.description|default('') if form else '' }}</textarea>
+                <small class="field-help">You do not need to have the solution yet. Lived experience is enough to begin.</small>
+            </label>
+
+            <div class="form-two">
+                <label>
+                    Category
+                    <select name="category" required>
+                        <option value="">Choose a category</option>
+                        {% for category in ['Education', 'Agriculture', 'Healthcare', 'Water', 'Environment', 'Energy', 'Urban Development', 'Accessibility', 'Public Administration', 'Rural Livelihoods'] %}
+                            <option>{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+
+                <label>
+                    Location
+                    <input name="location" required placeholder="District, state">
+                </label>
+            </div>
+
+            <label>
+                Evidence <span class="optional">optional</span>
+                <input type="file" name="evidence" multiple accept="image/*,.pdf,.doc,.docx">
+                <small class="field-help">Images and documents help reviewers understand the setting. Maximum 16 MB.</small>
+            </label>
+
+            <div class="ai-notice">
+                <span>✦</span>
+                <p>
+                    <strong>What happens next</strong><br>
+                    A focused AI assist will suggest a category, summary, priority and keywords. A human review remains part of the process.
+                </p>
+            </div>
+
+            <button class="primary-button" type="submit">
+                Submit for review <span>→</span>
+            </button>
+        </form>
+    </section>
+</main>
+{% endblock %}

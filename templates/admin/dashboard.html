@@ -1,0 +1,140 @@
+{% extends "layout.html" %}
+
+{% block title %}Admin dashboard | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Admin Sidebar -->
+    <aside class="side-nav admin-side">
+        <p class="side-label">Platform administration</p>
+        <h3>JanSaathi control room</h3>
+        
+        <nav class="side-nav-links" aria-label="Admin navigation">
+            <a class="side-active" href="{{ url_for('admin_dashboard') }}">
+                Overview
+            </a>
+            <a href="{{ url_for('admin_review') }}">
+                Review queue <span class="side-count">8</span>
+            </a>
+        </nav>
+
+        <div class="side-bottom">
+            <span>System status</span>
+            <strong class="online-dot">All services operational</strong>
+        </div>
+    </aside>
+
+    <!-- Admin Workspace Content -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Platform administration</p>
+                <h1>Keep the network healthy.</h1>
+                <p>Review activity, support good submissions and keep every handoff accountable.</p>
+            </div>
+            <a class="primary-button inline-button" href="{{ url_for('admin_review') }}">
+                Open review queue <span>→</span>
+            </a>
+        </div>
+
+        <div class="stat-row">
+            <div class="stat-card">
+                <span>Total users</span>
+                <strong>{{ users|length }}</strong>
+                <small>Registered accounts</small>
+            </div>
+            <div class="stat-card">
+                <span>Pending reviews</span>
+                <strong>8</strong>
+                <small>Needs attention</small>
+            </div>
+            <div class="stat-card">
+                <span>Active projects</span>
+                <strong>{{ projects|length + 7 }}</strong>
+                <small>Across the network</small>
+            </div>
+            <div class="stat-card">
+                <span>Organizations</span>
+                <strong>{{ organizations|length }}</strong>
+                <small>Known organizations</small>
+            </div>
+        </div>
+
+        <section class="surface">
+            <div class="surface-head">
+                <div>
+                    <p class="section-kicker">Recent activity</p>
+                    <h2>What changed today</h2>
+                </div>
+                <a class="text-link" href="{{ url_for('admin_review') }}">Review queue →</a>
+            </div>
+
+            <div class="activity-list">
+                <div>
+                    <span class="activity-dot green-dot"></span>
+                    <p>
+                        <strong>New challenge submitted</strong>
+                        <small>Affordable irrigation guidance · 18 minutes ago</small>
+                    </p>
+                </div>
+                <div>
+                    <span class="activity-dot blue-dot"></span>
+                    <p>
+                        <strong>University accepted a challenge</strong>
+                        <small>National Institute of Technology · 1 hour ago</small>
+                    </p>
+                </div>
+                <div>
+                    <span class="activity-dot coral-dot"></span>
+                    <p>
+                        <strong>Industry expressed interest</strong>
+                        <small>Sahaara Innovations · 2 hours ago</small>
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="surface admin-management">
+            <div class="surface-head">
+                <div>
+                    <p class="section-kicker">Account management</p>
+                    <h2>Every account, one place</h2>
+                </div>
+                <span class="field-help">Admin access is controlled by .env</span>
+            </div>
+            <div class="admin-table-wrap">
+                <table class="admin-table">
+                    <thead>
+                        <tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Action</th></tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                            <tr>
+                                <td><strong>{{ user.name }}</strong><small>{{ user.organization or 'No organization' }}</small></td>
+                                <td>{{ user.email }}</td>
+                                <td>
+                                    {% if user.role == 'admin' %}<span class="status status-accepted">Admin</span>
+                                    {% else %}<span class="status status-in-progress">{{ user.role|capitalize }}</span>{% endif %}
+                                </td>
+                                <td><span class="status {% if user.active %}status-resolved{% else %}status-rejected{% endif %}">{{ 'Active' if user.active else 'Disabled' }}</span></td>
+                                <td>
+                                    {% if user.id != session_user_id and user.role != 'admin' %}
+                                        <form class="admin-inline-form" method="post" action="{{ url_for('admin_update_user', user_id=user.id) }}">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                                            <select name="role" aria-label="Role for {{ user.email }}">
+                                                {% for role in ['citizen', 'university', 'industry', 'government'] %}<option value="{{ role }}" {% if user.role == role %}selected{% endif %}>{{ role|capitalize }}</option>{% endfor %}
+                                            </select>
+                                            <button class="quiet-button" name="action" value="{{ 'enable' if not user.active else 'disable' }}" type="submit">{{ 'Enable' if not user.active else 'Disable' }}</button>
+                                            <button class="danger-button" name="action" value="delete" type="submit">Delete</button>
+                                        </form>
+                                    {% else %}<span class="field-help">Protected</span>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main>
+{% endblock %}

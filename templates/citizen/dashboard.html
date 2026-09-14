@@ -1,0 +1,86 @@
+{% extends "layout.html" %}
+
+{% block title %}Citizen workspace | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Citizen Sidebar -->
+    <aside class="side-nav">
+        <p class="side-label">Citizen workspace</p>
+        <h3>{{ current_user.name }}</h3>
+        <nav class="side-nav-links" aria-label="Citizen navigation">
+            <a class="side-active" href="{{ url_for('citizen_dashboard') }}">Overview</a>
+            <a href="{{ url_for('citizen_challenges') }}">My challenges</a>
+            <a href="{{ url_for('submit_challenge') }}">Submit a challenge</a>
+        </nav>
+        <div class="side-bottom">
+            <span>Need help?</span>
+            <a href="{{ url_for('contact') }}">Contact support →</a>
+        </div>
+    </aside>
+
+    <!-- Main Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Tuesday, 05 September 2026</p>
+                <h1>Good morning, {{ current_user.name.split()[0] }}.</h1>
+                <p>Here is the progress on the problems you have brought forward.</p>
+            </div>
+            <a class="primary-button inline-button" href="{{ url_for('submit_challenge') }}">
+                Submit challenge <span>+</span>
+            </a>
+        </div>
+
+        <div class="stat-row">
+            {% for label, key in [('Submitted','submitted'), ('Under review','review'), ('Accepted','accepted'), ('In progress','progress'), ('Resolved','resolved')] %}
+                <div class="stat-card">
+                    <span>{{ label }}</span>
+                    <strong>{{ stats[key] }}</strong>
+                    <small>Demo overview</small>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="workspace-grid">
+            <section class="surface">
+                <div class="surface-head">
+                    <div>
+                        <p class="section-kicker">Your challenges</p>
+                        <h2>Keep the thread moving</h2>
+                    </div>
+                    <a class="text-link" href="{{ url_for('citizen_challenges') }}">View all →</a>
+                </div>
+
+                <div class="challenge-feed">
+                    {% for challenge in challenges %}
+                        <a class="challenge-row" href="{{ url_for('citizen_challenge_detail', challenge_id=challenge.id) }}">
+                            <span class="challenge-marker">{{ '%02d'|format(challenge.id) }}</span>
+                            <span class="challenge-main">
+                                <strong>{{ challenge.title }}</strong>
+                                <small>{{ challenge.location }} · {{ challenge.created_at }}</small>
+                            </span>
+                            <span class="status status-{{ challenge.status|lower }}">
+                                {{ challenge.status|replace('_',' ')|title }}
+                            </span>
+                            <span class="row-arrow">→</span>
+                        </a>
+                    {% else %}
+                        <div class="empty-state">
+                            <p>No challenges submitted yet.</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <aside class="insight-card">
+                <span class="insight-icon">✦</span>
+                <p class="section-kicker">JanSaathi insight</p>
+                <h3>Your challenges become stronger with context.</h3>
+                <p>Add evidence, local detail and the people affected. It helps the right collaborators understand where to begin.</p>
+                <a href="{{ url_for('submit_challenge') }}">Share another challenge →</a>
+            </aside>
+        </div>
+    </section>
+</main>
+{% endblock %}

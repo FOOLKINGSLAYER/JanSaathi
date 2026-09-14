@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block title %}Challenge discovery | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- University Sidebar -->
+    <aside class="side-nav university-side">
+        <p class="side-label">University workspace</p>
+        <h3>{{ current_user.organization }}</h3>
+        <nav class="side-nav-links" aria-label="University navigation">
+            <a href="{{ url_for('university_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('university_challenges') }}">Challenge discovery</a>
+            <a href="{{ url_for('university_project', project_id=1) }}">Project workspace</a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Open discovery board</p>
+                <h1>Challenges aligned to your strengths.</h1>
+                <p>Review context before deciding where your institution can help.</p>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <input placeholder="Search challenges, domains or districts" data-filter-input>
+            <select data-filter-domain>
+                <option value="">All domains</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="water">Water</option>
+                <option value="environment">Environment</option>
+            </select>
+            <select data-filter-priority>
+                <option value="">Any priority</option>
+                <option value="high">High</option>
+                <option value="medium">Medium</option>
+            </select>
+        </div>
+
+        <section class="surface challenge-list">
+            {% for challenge in challenges %}
+                <a class="challenge-row" 
+                   data-filter-item="{{ challenge.title }} {{ challenge.category }} {{ challenge.location }}"
+                   data-domain="{{ challenge.category|lower }}"
+                   data-priority="{{ challenge.priority|lower }}"
+                   href="{{ url_for('university_challenge_detail', challenge_id=challenge.id) }}">
+                    <span class="challenge-marker">{{ challenge.category[:2]|upper }}</span>
+                    <span class="challenge-main">
+                        <strong>{{ challenge.title }}</strong>
+                        <small>{{ challenge.category }} · {{ challenge.location }} · {{ challenge.evidence }} evidence items</small>
+                    </span>
+                    <span class="priority priority-{{ challenge.priority|lower }}">{{ challenge.priority }}</span>
+                    <span class="status status-{{ challenge.status|lower }}">{{ challenge.status|replace('_',' ')|title }}</span>
+                    <span class="row-arrow">→</span>
+                </a>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No challenges found</h2>
+                    <p>Try searching for a different domain or clear the active filters.</p>
+                </div>
+            {% endfor %}
+        </section>
+    </section>
+</main>
+{% endblock %}

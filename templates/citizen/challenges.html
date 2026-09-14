@@ -1,0 +1,72 @@
+{% extends "layout.html" %}
+
+{% block title %}My challenges | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="app-layout">
+    <!-- Citizen Sidebar -->
+    <aside class="side-nav">
+        <p class="side-label">Citizen workspace</p>
+        <h3>{{ current_user.name }}</h3>
+        <nav class="side-nav-links" aria-label="Citizen navigation">
+            <a href="{{ url_for('citizen_dashboard') }}">Overview</a>
+            <a class="side-active" href="{{ url_for('citizen_challenges') }}">My challenges</a>
+            <a href="{{ url_for('submit_challenge') }}">Submit a challenge</a>
+        </nav>
+    </aside>
+
+    <!-- Workspace -->
+    <section class="workspace">
+        <div class="workspace-head">
+            <div>
+                <p class="section-kicker">Your contribution</p>
+                <h1>My challenges</h1>
+                <p>Follow every challenge from first report to next step.</p>
+            </div>
+            <a class="primary-button inline-button" href="{{ url_for('submit_challenge') }}">
+                New challenge <span>+</span>
+            </a>
+        </div>
+
+        <div class="filter-bar">
+            <input placeholder="Search your challenges" data-filter-input>
+            <select data-filter-status>
+                <option value="">All statuses</option>
+                <option value="under review">Under review</option>
+                <option value="assigned">Assigned</option>
+                <option value="resolved">Resolved</option>
+            </select>
+            <select data-filter-category>
+                <option value="">All categories</option>
+                <option value="agriculture">Agriculture</option>
+                <option value="water">Water</option>
+                <option value="environment">Environment</option>
+            </select>
+        </div>
+
+        <section class="surface challenge-list">
+            {% for challenge in challenges %}
+                <a class="challenge-row" 
+                   data-filter-item="{{ challenge.title }} {{ challenge.category }} {{ challenge.location }}" 
+                   data-status="{{ challenge.status|lower }}"
+                   data-category="{{ challenge.category|lower }}"
+                   href="{{ url_for('citizen_challenge_detail', challenge_id=challenge.id) }}">
+                    <span class="challenge-marker">{{ '%02d'|format(challenge.id) }}</span>
+                    <span class="challenge-main">
+                        <strong>{{ challenge.title }}</strong>
+                        <small>{{ challenge.category }} · {{ challenge.location }} · Submitted {{ challenge.created_at }}</small>
+                    </span>
+                    <span class="priority priority-{{ challenge.priority|lower }}">{{ challenge.priority }} priority</span>
+                    <span class="status status-{{ challenge.status|lower }}">{{ challenge.status|replace('_',' ')|title }}</span>
+                    <span class="row-arrow">→</span>
+                </a>
+            {% else %}
+                <div class="empty-state">
+                    <h2>No challenges submitted yet</h2>
+                    <p>When you submit a challenge, you can monitor its progress from this dashboard.</p>
+                </div>
+            {% endfor %}
+        </section>
+    </section>
+</main>
+{% endblock %}

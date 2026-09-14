@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+
+{% block title %}Sitemap | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Sitemap
+        </p>
+        <h1>Find your way<br><em>through JanSaathi.</em></h1>
+    </section>
+
+    <section class="sitemap-grid">
+        {% for heading, links in [
+            ('Public', [
+                ('Home', 'index'),
+                ('About', 'about'),
+                ('How it works', 'how_it_works'),
+                ('Search challenges', 'search'),
+                ('Impact', 'impact'),
+                ('Contact', 'contact')
+            ]),
+            ('Authentication', [
+                ('Log in', 'login'),
+                ('Create account', 'register')
+            ]),
+            ('Support', [
+                ('Help and FAQs', 'help_page'),
+                ('Accessibility', 'accessibility'),
+                ('Sitemap', 'sitemap')
+            ])
+        ] %}
+            <section>
+                <p class="section-kicker">{{ heading }}</p>
+                <h2>{{ heading }}</h2>
+                {% for label, endpoint in links %}
+                    <a href="{{ url_for(endpoint) }}">
+                        {{ label }} <span>→</span>
+                    </a>
+                {% endfor %}
+            </section>
+        {% endfor %}
+    </section>
+</main>
+{% endblock %}

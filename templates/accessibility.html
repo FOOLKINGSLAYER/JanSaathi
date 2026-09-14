@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %}Accessibility | JanSaathi{% endblock %}
+
+{% block content %}
+<main class="content-page">
+    <section class="page-hero compact">
+        <p class="eyebrow">
+            <span class="eyebrow-dot"></span> Accessibility statement
+        </p>
+        <h1>Designed for<br><em>more people to participate.</em></h1>
+        <p>Accessibility is a design priority for JanSaathi, not a certification claim.</p>
+    </section>
+
+    <section class="prose-page">
+        <p class="last-updated">Prototype content · reviewed 05 September 2026</p>
+        
+        <h2>Our approach</h2>
+        <p>
+            JanSaathi has been designed with WCAG 2.1 Level AA and applicable GIGW 3.0 accessibility principles in mind. 
+            This prototype is not formally certified.
+        </p>
+
+        <h2>Implemented in this prototype</h2>
+        <ul>
+            <li>Semantic page landmarks, logical headings and a skip-to-content link.</li>
+            <li>Visible labels, focus states and understandable form feedback.</li>
+            <li>Responsive layouts intended to remain usable at increased zoom.</li>
+            <li>Text labels alongside status colours and chart context.</li>
+            <li>Reduced-motion support for non-essential movement.</li>
+        </ul>
+
+        <h2>Known limitations</h2>
+        <p>
+            Language translations, full screen-reader chart alternatives, production accessibility testing 
+            and external document accessibility remain future work before deployment.
+        </p>
+    </section>
+</main>
+{% endblock %}
